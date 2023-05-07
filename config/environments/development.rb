@@ -61,4 +61,7 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+
+  config.x.auth0.domain = "dev-2l7x8x05wpghp2c8.us.auth0.com"
+  config.x.auth0.audience = "O04UKHj2ZpAh8QIK6ta4NdX7AtB4dwZM"
 end

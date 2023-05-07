@@ -83,4 +83,8 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Using same values from development
+  config.x.auth0.domain = "dev-2l7x8x05wpghp2c8.us.auth0.com"
+  config.x.auth0.audience = "O04UKHj2ZpAh8QIK6ta4NdX7AtB4dwZM"
 end

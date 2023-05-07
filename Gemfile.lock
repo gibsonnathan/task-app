@@ -85,6 +85,7 @@ GEM
     io-console (0.6.0)
     irb (1.6.4)
       reline (>= 0.3.0)
+    jwt (2.7.0)
     loofah (2.20.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -163,6 +164,7 @@ DEPENDENCIES
   bootsnap
   debug
   faker
+  jwt
   populator
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.3)
