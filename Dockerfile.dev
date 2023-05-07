@@ -3,7 +3,9 @@ RUN apt-get update -qq && apt-get install -y nodejs
 COPY . /app
 WORKDIR /app
 RUN bundle install
+RUN rails db:migrate
+RUN rails db:seed
 
 EXPOSE 3000
 
-CMD ["rails", "server", "-b", "0.0.0.0"]
+ENTRYPOINT RAILS_ENV=development rails server -b 0.0.0.0
