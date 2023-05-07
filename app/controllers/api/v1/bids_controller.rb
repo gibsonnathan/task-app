@@ -1,7 +1,13 @@
 module Api
   module V1
     class BidsController < ApplicationController
+      before_action :authenticate
       before_action :set_bid, only: %i[ show update destroy ]
+      before_action only: %i[update destroy] do
+        user_id = @bid.user_id
+        user = User.find(user_id)
+        authorize user
+      end
 
       # GET /bids
       def index
@@ -17,10 +23,15 @@ module Api
 
       # POST /bids
       def create
+        # create record of user at bid creation time
+        unless user_exists?
+          create_user
+        end
+
         @bid = Bid.new(bid_params)
 
         if @bid.save
-          render json: @bid, status: :created, location: @bid
+          render json: @bid, status: :created, location: url_for([:api, :v1, @bid])
         else
           render json: @bid.errors, status: :unprocessable_entity
         end
@@ -49,7 +60,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def bid_params
-        params.fetch(:bid, {})
+        params.fetch(:bid, {}).permit(:task_id, :user_id, :amount, :unit)
       end
     end
   end
