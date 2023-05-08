@@ -40,9 +40,9 @@ module Api
       end
 
       # DELETE /users/1
-      def destroy
-        @user.destroy
-      end
+      # def destroy
+      #   @user.destroy
+      # end
 
       private
 
