@@ -48,7 +48,7 @@ module Api
 
       # DELETE /bids/1
       def destroy
-        @bid.destroy
+        @bid.update(deleted: true)
       end
 
       private

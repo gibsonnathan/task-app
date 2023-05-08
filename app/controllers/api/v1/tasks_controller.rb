@@ -49,7 +49,7 @@ module Api
 
       # DELETE /tasks/1
       def destroy
-        @task.destroy
+        @task.update(deleted: true)
       end
 
       private
