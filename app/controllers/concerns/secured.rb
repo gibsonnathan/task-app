@@ -31,10 +31,17 @@ module Secured
 
     @decoded_token = validation_response.decoded_token
 
+    if @decoded_token.nil?
+      render json: { message: validation_response.error }, status: 401
+      return
+    end
+
     token_body = @decoded_token[0][0]
     @last_name = token_body["given_name"]
     @first_name = token_body["family_name"]
     @email = token_body["email"]
+
+    @authenticated_user = User.where(["email = ?", @email])[0]
 
     if @last_name.nil? or @first_name.nil? or @email.nil?
       render json: { message: "Must have first, last, and email." }, status: 401
@@ -72,8 +79,7 @@ module Secured
   end
 
   def authorize(user)
-    email = @decoded_token[0][0]["email"]
-    unless user.email == email
+    unless user.email == @email
       render json: { message: "User is not authorized." }, status: 401
     end
   end
