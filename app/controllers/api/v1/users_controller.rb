@@ -3,9 +3,6 @@ module Api
     class UsersController < ApplicationController
       before_action :authenticate
       before_action :set_user, only: %i[ show update destroy ]
-      before_action only: %i[update destroy] do
-        authorize @user
-      end
 
       # GET /users
       def index
@@ -19,17 +16,6 @@ module Api
         render json: @user
       end
 
-      # POST /users we don't create users
-      # def create
-      #   @user = User.new(user_params)
-
-      #   if @user.save
-      #     render json: @user, status: :created, location: @user
-      #   else
-      #     render json: @user.errors, status: :unprocessable_entity
-      #   end
-      # end
-
       # PATCH/PUT /users/1
       def update
         if @user.update(user_params)
@@ -39,18 +25,13 @@ module Api
         end
       end
 
-      # DELETE /users/1
-      # def destroy
-      #   @user.destroy
-      # end
-
       private
 
       # Use callbacks to share common setup or constraints between actions.
       def set_user
         @user = User.find(params[:id])
       end
-
+      
       # Only allow a list of trusted parameters through.
       def user_params
         params.fetch(:user, {})

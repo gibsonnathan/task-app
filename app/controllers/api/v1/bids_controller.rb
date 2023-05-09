@@ -24,11 +24,11 @@ module Api
       # POST /bids
       def create
         # create record of user at bid creation time
-        unless user_exists?
-          create_user
+        if @authenticated_user.nil?
+          @authenticated_user = User.create(email: @email, first_name: @first_name, last_name: @last_name)
         end
 
-        @bid = Bid.new(bid_params)
+        @bid = Bid.new(bid_params.merge({:user_id => @authenticated_user.id})
 
         if @bid.save
           render json: @bid, status: :created, location: url_for([:api, :v1, @bid])
@@ -60,7 +60,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def bid_params
-        params.fetch(:bid, {}).permit(:task_id, :user_id, :amount, :unit)
+        params.fetch(:bid, {}).permit(:task_id, :amount, :unit)
       end
     end
   end
