@@ -60,4 +60,7 @@ Rails.application.configure do
 
   config.x.auth0.domain = "test.com"
   config.x.auth0.audience = "asdfhjklasdfhjkl"
+
+  # config.logger = Logger.new(STDOUT)
+  # config.log_level = :debug
 end

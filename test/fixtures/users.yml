@@ -1,9 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  auth_token: 
-  email: MyString
+user_one:
+  email: gibson_nathaniel1@columbusstate.edu
 
-two:
-  auth_token: 
-  email: MyString
+user_two:
+  email: another.user@gmail.com
+

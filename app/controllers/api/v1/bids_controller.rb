@@ -28,7 +28,7 @@ module Api
           @authenticated_user = User.create(email: @email, first_name: @first_name, last_name: @last_name)
         end
 
-        @bid = Bid.new(bid_params.merge({:user_id => @authenticated_user.id})
+        @bid = Bid.new(bid_params.merge({ :user_id => @authenticated_user.id }))
 
         if @bid.save
           render json: @bid, status: :created, location: url_for([:api, :v1, @bid])

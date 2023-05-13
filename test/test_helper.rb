@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require "webmock/test_unit"
 
 class ActiveSupport::TestCase
   # Run tests in parallel with specified workers
@@ -9,5 +10,17 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
+  TEST_AUTHORIZATION_HEADER = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImliOF9BSmJNNC1uc1RfektEaWRLUSJ9.eyJnaXZlbl9uYW1lIjoiTmF0aGFuaWVsIiwiZmFtaWx5X25hbWUiOiJHaWJzb24iLCJuaWNrbmFtZSI6ImdpYnNvbl9uYXRoYW5pZWwxIiwibmFtZSI6Ik5hdGhhbmllbCBHaWJzb24iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUdObXl4Yldkc1JfNmtub0dFRDhvMVlBYkIzSWNPUS1XeEt0M0dNRjdjN289czk2LWMiLCJsb2NhbGUiOiJlbiIsInVwZGF0ZWRfYXQiOiIyMDIzLTA1LTEyVDIzOjU3OjE4Ljg5NVoiLCJlbWFpbCI6ImdpYnNvbl9uYXRoYW5pZWwxQGNvbHVtYnVzc3RhdGUuZWR1IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImlzcyI6Imh0dHBzOi8vZGV2LTJsN3g4eDA1d3BnaHAyYzgudXMuYXV0aDAuY29tLyIsImF1ZCI6Ik8wNFVLSGoyWnBBaDhRSUs2dGE0TmRYN0F0QjRkd1pNIiwiaWF0IjoxNjgzOTM1ODQyLCJleHAiOjE2ODM5NzE4NDIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTE2NTIzNTM0MDA1OTA2NTMzNzQ4Iiwic2lkIjoiV0tZV1BfWnBZM1pYWHZwenlrdUlMbGxPbm1BWVNDRW0iLCJub25jZSI6ImNINW1OMmRZTkZKRldESTNlakZtZHpkdE5sQTNjbVZZYkdSWk9FUm9PVXhPV0ZkV1JIbzBjM2hFVEE9PSJ9.ASUt5RGr4-Ll2uENUvqYYFv-u1K1njTh64NzFReLZwIQpU63o3Aezof5OjinyX4jioE92Ow7FFJSXUFptbd8o5q1Ir_GHlFe2PzPHfqiwkCfrQo3WOkQcxhM8AkF5BQO-mjllUn7xKgSEcYM2Y9pms8_oa9maeJSvhJZ4VMJFS_MiAfOiVu6NJWh0TTClo473j7QDA-5PzcRkC6LjmEDIIDWsL080bFnBr09SnLE_i5dK6d6i9oi0pPUhp3aTy0X4VIEy0wyT2R_NYMgwS6zjzwFxZvaUHVo9ROCYOobFUPtSXbv6BFeQo7OzxlSb8KLsof5ceHpj-Ss-ds3NdHHHg"
+
   # Add more helper methods to be used by all tests here...
+  WebMock.stub_request(:get, "https://test.com/.well-known/jwks.json").
+    with(
+    headers: {
+      "Accept" => "*/*",
+      "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+      "Host" => "test.com",
+      "User-Agent" => "Ruby",
+    },
+  ).
+    to_return(status: 200, body: "{\"keys\":[{\"alg\":\"RS256\",\"kty\":\"RSA\",\"use\":\"sig\",\"n\":\"rivLQ5Dsu0PO0yZSdBtwy9CDrnteC_n3wUecIJ13cEWsEWyB_AGH-ufRh_0Pt6Apgq3lbM5qyXpaGH3v39OMDMX6hpWy_J6x_v9zO_hSgu8eVrf_B6_HM9SlcHUSoPcD7Rvglwm2fKkuXgd54S2jOHyzcmviD1INlN6ktU0taDg8FmqDUZZG8Sxe-LWFQ9aqcQ3O5G5MNWTg_LRptG_hFpohun8tqSP1O6wfkg9EdaOF38-X9MGV2Dhf0TNSnO3ReG1TSrf8xSuCBlydZv2aN-01tkCg6zv_zWVhDGNDUtyk2qBbErlFiIf5qZbuti1lelh4W03zXh_E_BGwzVkf-w\",\"e\":\"AQAB\",\"kid\":\"ib8_AJbM4-nsT_zKDidKQ\",\"x5t\":\"hgwHj6PSV0dOoTYNwwvfM-Ij2O0\",\"x5c\":[\"MIIDHTCCAgWgAwIBAgIJB5abC4xX4MoUMA0GCSqGSIb3DQEBCwUAMCwxKjAoBgNVBAMTIWRldi0ybDd4OHgwNXdwZ2hwMmM4LnVzLmF1dGgwLmNvbTAeFw0yMzA1MDcxNzQ2MjdaFw0zNzAxMTMxNzQ2MjdaMCwxKjAoBgNVBAMTIWRldi0ybDd4OHgwNXdwZ2hwMmM4LnVzLmF1dGgwLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK4ry0OQ7LtDztMmUnQbcMvQg657Xgv598FHnCCdd3BFrBFsgfwBh/rn0Yf9D7egKYKt5WzOasl6Whh979/TjAzF+oaVsvyesf7/czv4UoLvHla3/wevxzPUpXB1EqD3A+0b4JcJtnypLl4HeeEtozh8s3Jr4g9SDZTepLVNLWg4PBZqg1GWRvEsXvi1hUPWqnENzuRuTDVk4Py0abRv4RaaIbp/Lakj9TusH5IPRHWjhd/Pl/TBldg4X9EzUpzt0XhtU0q3/MUrggZcnWb9mjftNbZAoOs7/81lYQxjQ1LcpNqgWxK5RYiH+amW7rYtZXpYeFtN814fxPwRsM1ZH/sCAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQU01wE2xQ+wCeIaTqommgxROS5H5MwDgYDVR0PAQH/BAQDAgKEMA0GCSqGSIb3DQEBCwUAA4IBAQAbI2S9KiVOg4E9EnZvY7wYYgXsYCHXZd6lr0FPM7RLpRR5Rl+KfeZAymxVN5E40LwPeAEtTrQrodoDAWUfUjb/v8TQElyWjUiO5yQ5FpHwqBpyB4J6+YsdHMUYIo5SckYUDX7FVBjne51ddNJ+fiuoEP2h85+lRLXCY83Moijwo7DZI3JQnmM0ksGD2v1MFquDDEZxETLhFw5CByJf9gbdGvqDYULEIpBclKSsRkRLRXt0XKH8R/Ig3TKCuVtAYWhKCChflB6WeQiedTjgIeV37xKWmWop6agr6e2r8UzVnSY9zOj1ZtQ8jreREn7z7U7jDJGdW2jDmbr7zEZxybQe\"]},{\"alg\":\"RS256\",\"kty\":\"RSA\",\"use\":\"sig\",\"n\":\"0ut15FZTRvzqBv87d2saxEtrrKtl-e0eTjR2l5Uuxg8sZ8FPfeb3QqVw4Hpe0ETO82cL8Nvl0YYEJ2TiOeS_SrgRhc2TrTJfATltSmF4EVZu0zBbcabHupCByX3keH-utMNVmV3w-Q6rNlLbgIKlNSqYqIT5DyeqWcA0Xy5W3t1JVGhIueuLrjQqv5oIWuQoKZEOLeA031HjgQA7v2AFKummHhE6di7p8Op98eF-f-oSc8YGF5v8dk9yVMc29tme4Z4-noaH7XNmXY7HKIiaf1ThzB2N0CBCQyOIIvlZGuw9P-sSjXCuTwfMkh8NarNSEFt7PRMgDGMmIG7-XrZlOQ\",\"e\":\"AQAB\",\"kid\":\"mQYM5yzp088ML3oRElXP2\",\"x5t\":\"pbIyLzWActGJJn_iFOHRG1OVsqk\",\"x5c\":[\"MIIDHTCCAgWgAwIBAgIJBZFQa1kjsbETMA0GCSqGSIb3DQEBCwUAMCwxKjAoBgNVBAMTIWRldi0ybDd4OHgwNXdwZ2hwMmM4LnVzLmF1dGgwLmNvbTAeFw0yMzA1MDcxNzQ2MjdaFw0zNzAxMTMxNzQ2MjdaMCwxKjAoBgNVBAMTIWRldi0ybDd4OHgwNXdwZ2hwMmM4LnVzLmF1dGgwLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBANLrdeRWU0b86gb/O3drGsRLa6yrZfntHk40dpeVLsYPLGfBT33m90KlcOB6XtBEzvNnC/Db5dGGBCdk4jnkv0q4EYXNk60yXwE5bUpheBFWbtMwW3Gmx7qQgcl95Hh/rrTDVZld8PkOqzZS24CCpTUqmKiE+Q8nqlnANF8uVt7dSVRoSLnri640Kr+aCFrkKCmRDi3gNN9R44EAO79gBSrpph4ROnYu6fDqffHhfn/qEnPGBheb/HZPclTHNvbZnuGePp6Gh+1zZl2OxyiImn9U4cwdjdAgQkMjiCL5WRrsPT/rEo1wrk8HzJIfDWqzUhBbez0TIAxjJiBu/l62ZTkCAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUmKvkXsPX4PFUqVAyhJz6CkF8F68wDgYDVR0PAQH/BAQDAgKEMA0GCSqGSIb3DQEBCwUAA4IBAQA2gXrhdJZuMLl7g9Dlc5AlDkdNKK8PlzwX3fdBuQV6lu/A6AKRFCJ23NUheM9YGCVSZNKZtRJ1/d7cxsEUeD0Jhh4bGMigxoXiU+HPOOe2bywrPPSSdFoRRwxt6XOXS7WWG78Z7xfVNFKul6K9KDBA71XgwD5qsf/AOmEdzAJ9+CLnqIxz0LisG7M3OXJVc+L+4qVMV4aJ/1fgICUxFuIjnONS3pIfNVOKL8p4bviYop0jJgRvmhGp7TcxdTyN4PigrOcypG752q/ivUwU9SBSpILRtpDsq4iZFfVdg7uRfPanJGTam07lJe5ZfdbjIr4b+l9SnJLfEsB+ISOq9n+o\"]}]}")
 end

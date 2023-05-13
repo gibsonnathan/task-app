@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  task: one
-  user: one
+bid_one:
+  task: task_one
+  user: user_one
 
-two:
-  task: two
-  user: two
+bid_two:
+  task: task_two
+  user: user_one

@@ -27,7 +27,7 @@ module Api
         if @authenticated_user.nil?
           @authenticated_user = User.create(email: @email, first_name: @first_name, last_name: @last_name)
         end
-        
+
         @task = Task.new(task_params.merge({ :user_id => @authenticated_user.id }))
 
         if @task.save
