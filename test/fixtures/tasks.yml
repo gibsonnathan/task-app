@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  description: MyString
-  user: one
+task_one:
+  description: MyString1
+  user: user_one
 
-two:
-  description: MyString
-  user: two
+task_two:
+  description: MyString2
+  user: user_one

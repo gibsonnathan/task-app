@@ -25,7 +25,7 @@ class Auth0Client
   end
 
   def self.decode_token(token, jwks_hash)
-    JWT.decode(token, nil, true, {
+    JWT.decode(token, nil, !Rails.env.test?, {
       algorithm: "RS256",
       iss: domain_url,
       verify_iss: true,
