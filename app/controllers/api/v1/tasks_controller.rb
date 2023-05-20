@@ -12,7 +12,6 @@ module Api
       # GET /tasks
       def index
         @tasks = Task.all
-
         render json: @tasks
       end
 
@@ -24,11 +23,9 @@ module Api
       # POST /tasks
       def create
         # create record of user at task creation time
-        if @authenticated_user.nil?
-          @authenticated_user = User.create(email: @email, first_name: @first_name, last_name: @last_name)
-        end
+        user = get_user!
 
-        @task = Task.new(task_params.merge({ :user_id => @authenticated_user.id }))
+        @task = Task.new(task_params.merge({ :user_id => user.id }))
 
         if @task.save
           render json: @task, status: :created, location: url_for([:api, :v1, @task])

@@ -22,10 +22,9 @@ module Secured
 
   def authenticate
     token = token_from_request
-
     return if performed?
 
-    validation_response = Auth0Client.validate_token(token)
+    validation_response = Auth0Client.validate_token token
 
     logger.debug("validation_response: #{validation_response}")
 
@@ -36,15 +35,10 @@ module Secured
       return
     end
 
-    token_body = @decoded_token[0][0]
-    @last_name = token_body["given_name"]
-    @first_name = token_body["family_name"]
-    @email = token_body["email"]
+    @token_user = map_user_from_token
 
-    @authenticated_user = User.where(["email = ?", @email])[0]
-
-    if @last_name.nil? or @first_name.nil? or @email.nil?
-      render json: { message: "Must have first, last, and email." }, status: 401
+    if @token_user[:email].nil?
+      render json: { message: "Must have email." }, status: 401
     end
 
     return unless (error = validation_response.error)
@@ -55,7 +49,6 @@ module Secured
   def validate_permissions(permissions)
     raise "validate_permissions needs to be called with a block" unless block_given?
     return yield if @decoded_token.validate_permissions(permissions)
-
     render json: INSUFFICIENT_PERMISSIONS, status: :forbidden
   end
 
@@ -63,7 +56,6 @@ module Secured
 
   def token_from_request
     authorization_header_elements = request.headers["Authorization"]&.split
-
     render json: REQUIRES_AUTHENTICATION, status: :unauthorized and return unless authorization_header_elements
 
     unless authorization_header_elements.length == 2
@@ -72,15 +64,18 @@ module Secured
     end
 
     scheme, token = authorization_header_elements
-
     render json: BAD_CREDENTIALS, status: :unauthorized and return unless scheme.downcase == "bearer"
-
     token
   end
 
   def authorize(user)
-    unless user.email == @email
+    unless user.email == @token_user[:email]
       render json: { message: "User is not authorized." }, status: 401
     end
+  end
+
+  def map_user_from_token
+    body = @decoded_token[0][0]
+    { :last_name => body["given_name"], :first_name => body["family_name"], :email => body["email"] }
   end
 end
