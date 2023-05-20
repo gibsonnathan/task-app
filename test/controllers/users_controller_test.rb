@@ -7,18 +7,33 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get users_url, headers: { "Authorization" => TEST_AUTHORIZATION_HEADER }, as: :json
+    get users_url, headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
     assert_response :success
+  end
+
+  test "should not get index when unauthenticated" do
+    get users_url, as: :json
+    assert_response :unauthorized
   end
 
   test "should show user" do
-    get user_url(@user), headers: { "Authorization" => TEST_AUTHORIZATION_HEADER }, as: :json
+    get user_url(@user), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
     assert_response :success
   end
 
+  test "should not show user when unauthenticated" do
+    get user_url(@user), as: :json
+    assert_response :unauthorized
+  end
+
   test "should update user" do
-    patch user_url(@user), headers: { "Authorization" => TEST_AUTHORIZATION_HEADER }, params: { user: {} }, as: :json
+    patch user_url(@user), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { user: {} }, as: :json
     assert_response :success
+  end
+
+  test "user two should not update user one" do
+    patch user_url(@user), headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { user: {} }, as: :json
+    assert_response :unauthorized
   end
 
   private
