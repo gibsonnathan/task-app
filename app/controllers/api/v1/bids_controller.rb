@@ -33,15 +33,6 @@ module Api
         end
       end
 
-      # PATCH/PUT /bids/1
-      def update
-        if @bid.update(bid_params)
-          render json: @bid
-        else
-          render json: @bid.errors, status: :unprocessable_entity
-        end
-      end
-
       # DELETE /bids/1
       def destroy
         @bid.update(deleted: true)

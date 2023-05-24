@@ -46,16 +46,6 @@ class BidsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "should update bid" do
-    patch bid_url(@bid), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { bid: {} }, as: :json
-    assert_response :success
-  end
-
-  test "should not update user one's bid" do
-    patch bid_url(@bid), headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { bid: {} }, as: :json
-    assert_response :unauthorized
-  end
-
   test "should soft delete bid" do
     assert_no_difference("Bid.count") do
       delete bid_url(@bid), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
