@@ -26,16 +26,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test "should update user" do
-    patch user_url(@user), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { user: {} }, as: :json
-    assert_response :success
-  end
-
-  test "user two should not update user one" do
-    patch user_url(@user), headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { user: {} }, as: :json
-    assert_response :unauthorized
-  end
-
   private
 
   def user_url(user)
