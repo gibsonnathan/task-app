@@ -15,6 +15,7 @@ end
 Task.populate 50 do |t|
   t.description = Faker::Lorem.sentences
   t.user_id = User.find(User.pluck(:id).sample).id
+  t.deleted = [true, false].sample
 end
 
 Bid.populate 50 do |b|
@@ -22,4 +23,5 @@ Bid.populate 50 do |b|
   b.user_id = User.find(User.pluck(:id).sample).id
   b.amount = Faker::Number.number
   b.unit = "USD"
+  b.deleted = [true, false].sample
 end

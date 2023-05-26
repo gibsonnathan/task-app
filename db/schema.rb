@@ -38,7 +38,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_08_231152) do
     t.datetime "updated_at", null: false
     t.string "first_name"
     t.string "last_name"
-    t.index ["email"], name: "index_Users_on_email", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "bids", "tasks"
