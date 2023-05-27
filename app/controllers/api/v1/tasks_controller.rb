@@ -48,6 +48,10 @@ module Api
         @task.update(deleted: true)
       end
 
+      def api_v1_task_url(id)
+        return "/api/v1/tasks/#{id}"
+      end
+
       private
 
       # Use callbacks to share common setup or constraints between actions.
