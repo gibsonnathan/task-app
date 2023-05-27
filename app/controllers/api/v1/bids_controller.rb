@@ -38,6 +38,10 @@ module Api
         @bid.update(deleted: true)
       end
 
+      def api_v1_bid_url(id)
+        return "/api/v1/bids/#{id}"
+      end
+
       private
 
       # Use callbacks to share common setup or constraints between actions.
