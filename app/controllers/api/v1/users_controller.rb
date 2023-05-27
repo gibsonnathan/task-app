@@ -9,7 +9,7 @@ module Api
 
       # GET /users
       def index
-        @users = User.all
+        @users = User.order(:updated_at).page params[:page]
 
         render json: @users
       end
