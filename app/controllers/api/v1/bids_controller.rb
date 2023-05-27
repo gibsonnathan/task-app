@@ -11,7 +11,7 @@ module Api
 
       # GET /bids
       def index
-        @bids = Bid.all
+        @bids = User.order(:updated_at).page params[:page]
         render json: @bids
       end
 

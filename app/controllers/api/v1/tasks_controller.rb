@@ -11,7 +11,7 @@ module Api
 
       # GET /tasks
       def index
-        @tasks = Task.all
+        @tasks = Task.order(:updated_at).page params[:page]
         render json: @tasks
       end
 
