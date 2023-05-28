@@ -11,8 +11,13 @@ module Api
 
       # GET /tasks
       def index
-        @tasks = Task.order(:updated_at).page params[:page]
-        render json: @tasks
+        @tasks = Task.order(updated_at: :desc)
+
+        if filtering_by_location?
+          @tasks = @tasks.select { |t| t.in_radius?(params[:lat].to_f, params[:long].to_f, params[:radius].to_f) }
+        end
+
+        render json: Kaminari.paginate_array(@tasks).page(params[:page])
       end
 
       # GET /tasks/1
@@ -54,6 +59,10 @@ module Api
 
       private
 
+      def filtering_by_location?
+        ![params[:lat], params[:long], params[:radius]].any? { |p| p.nil? }
+      end
+
       # Use callbacks to share common setup or constraints between actions.
       def set_task
         @task = Task.find(params[:id])
@@ -61,7 +70,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def task_params
-        params.fetch(:task, {}).permit(:description)
+        params.fetch(:task, {}).permit(:description, :lat, :long)
       end
     end
   end
