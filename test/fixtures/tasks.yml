@@ -3,7 +3,11 @@
 task_one:
   description: MyString1
   user: user_one
+  lat: 34.235
+  long: 84.234
 
 task_two:
   description: MyString2
   user: user_one
+  lat: 36.235
+  long: 82.234

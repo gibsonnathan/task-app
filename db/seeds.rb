@@ -6,22 +6,50 @@ require_relative "../lib/populator_fix.rb"
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-User.populate 50 do |u|
+User.populate 1000 do |u|
   u.first_name = Faker::Name.first_name
   u.last_name = Faker::Name.last_name
   u.email = Faker::Internet.email
 end
 
-Task.populate 50 do |t|
+Task.populate 3000 do |t|
   t.description = Faker::Lorem.sentences
   t.user_id = User.find(User.pluck(:id).sample).id
   t.deleted = [true, false].sample
+  t.lat = Faker::Address.latitude
+  t.long = Faker::Address.longitude
 end
 
-Bid.populate 50 do |b|
+Bid.populate 3000 do |b|
   b.task_id = Task.find(Task.pluck(:id).sample).id
   b.user_id = User.find(User.pluck(:id).sample).id
   b.amount = Faker::Number.number
   b.unit = "USD"
   b.deleted = [true, false].sample
+end
+
+User.find_each do |u|
+  u.created_at = (rand * 10).days.ago
+  u.updated_at = u.created_at
+  u.save
+end
+
+User.find_each do |u|
+  u.created_at = (rand * 10).days.ago
+  u.updated_at = u.created_at
+  u.save
+end
+
+Task.find_each do |t|
+  user = User.find(t.user_id)
+  t.created_at = user.created_at + (rand * 3).days
+  t.updated_at = t.created_at + (rand * 3).days
+  t.save
+end
+
+Bid.find_each do |b|
+  task = Task.find(b.task_id)
+  b.created_at = task.created_at + (rand * 3).days
+  b.updated_at = b.created_at + (rand * 3).days
+  b.save
 end
