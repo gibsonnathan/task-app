@@ -76,6 +76,7 @@ module Secured
 
   def map_user_from_token
     body = @decoded_token[0][0]
-    { :last_name => body["given_name"], :first_name => body["family_name"], :email => body["email"] }
+    { :last_name => body["given_name"], :first_name => body["family_name"],
+       :email => body["email"], :pfp_link => body["picture"] }
   end
 end

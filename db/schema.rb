@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_27_233512) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_28_025643) do
   create_table "bids", force: :cascade do |t|
     t.integer "task_id", null: false
     t.integer "user_id", null: false
@@ -31,6 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_27_233512) do
     t.boolean "deleted", default: false
     t.float "lat", null: false
     t.float "long", null: false
+    t.string "title", null: false
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
@@ -40,6 +41,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_27_233512) do
     t.datetime "updated_at", null: false
     t.string "first_name"
     t.string "last_name"
+    t.string "pfp_link"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
