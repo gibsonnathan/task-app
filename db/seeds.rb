@@ -10,9 +10,11 @@ User.populate 1000 do |u|
   u.first_name = Faker::Name.first_name
   u.last_name = Faker::Name.last_name
   u.email = Faker::Internet.email
+  u.pfp_link = "https://lh3.googleusercontent.com/a/AAcHTteC398e3vBRFbjEANwl21KCySX7BwnaPKczHJ-awg=s96-c"
 end
 
 Task.populate 3000 do |t|
+  t.title = Faker::Job.field
   t.description = Faker::Lorem.sentences
   t.user_id = User.find(User.pluck(:id).sample).id
   t.deleted = [true, false].sample

@@ -18,7 +18,8 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   test "should create task" do
     assert_difference("Task.count") do
       post tasks_url, headers: { "Authorization" => USER_ONE_AUTH_HEADER },
-                      params: { task: { "description" => "test", "lat" => "123.45", "long" => "234.45" } }, as: :json
+                      params: { task: { "description" => "test",
+                                       "lat" => "123.45", "long" => "234.45", "title" => "test title" } }, as: :json
     end
 
     assert_response :created
@@ -27,7 +28,8 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   test "creating task with new user should create user" do
     assert_difference("User.count", 1) do
       post tasks_url, headers: { "Authorization" => USER_NOT_IN_DB },
-                      params: { task: { "description" => "test", "lat" => "123.45", "long" => "234.45" } }, as: :json
+                      params: { task: { "description" => "test", "lat" => "123.45",
+                                       "long" => "234.45", "title" => "test title" } }, as: :json
     end
 
     assert_response :created

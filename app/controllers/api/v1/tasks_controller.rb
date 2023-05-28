@@ -70,7 +70,7 @@ module Api
 
       # Only allow a list of trusted parameters through.
       def task_params
-        params.fetch(:task, {}).permit(:description, :lat, :long)
+        params.fetch(:task, {}).permit(:description, :lat, :long, :title)
       end
     end
   end
