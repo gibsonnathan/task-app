@@ -2,10 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :authenticate
-      before_action :set_user, only: %i[ show update destroy ]
-      before_action only: %i[ update ] do
-        authorize @user
-      end
+      before_action :set_user, only: %i[ show ]
 
       # GET /users
       def index

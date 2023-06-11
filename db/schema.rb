@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_28_025643) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_10_033533) do
   create_table "bids", force: :cascade do |t|
     t.integer "task_id", null: false
     t.integer "user_id", null: false
@@ -21,6 +21,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_28_025643) do
     t.boolean "deleted", default: false
     t.index ["task_id"], name: "index_bids_on_task_id"
     t.index ["user_id"], name: "index_bids_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "task_id", null: false
+    t.string "message", null: false
+    t.boolean "read", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_notifications_on_task_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -45,7 +56,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_28_025643) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "watched_tasks", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "task_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "bids", "tasks"
   add_foreign_key "bids", "users"
+  add_foreign_key "notifications", "tasks"
+  add_foreign_key "notifications", "users"
   add_foreign_key "tasks", "users"
 end

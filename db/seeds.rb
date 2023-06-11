@@ -30,6 +30,18 @@ Bid.populate 3000 do |b|
   b.deleted = [true, false].sample
 end
 
+Notification.populate 100 do |n|
+  n.user_id = User.ids.sample
+  n.task_id = Task.ids.sample
+  n.message = Faker::Lorem.sentences
+  n.read = [true, false].sample
+end
+
+WatchedTask.populate 500 do |w|
+  w.user_id = User.ids.sample
+  w.task_id = Task.ids.sample
+end
+
 User.find_each do |u|
   u.created_at = (rand * 10).days.ago
   u.updated_at = u.created_at
