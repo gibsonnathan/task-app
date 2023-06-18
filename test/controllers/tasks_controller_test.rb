@@ -97,8 +97,8 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
     Task.delete_all
     assert_empty Task.all
     post tasks_url, headers: { "Authorization" => USER_ONE_AUTH_HEADER },
-    params: { task: { "description" => "test",
-                     "lat" => "123.45", "long" => "234.45", "title" => "test title" } }, as: :json
+                    params: { task: { "description" => "test",
+                                     "lat" => "123.45", "long" => "234.45", "title" => "test title" } }, as: :json
     assert_equal 1, Task.all.length
     task = Task.first
     assert_equal "test", task.description
