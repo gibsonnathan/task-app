@@ -62,6 +62,34 @@ class BidsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test "getting bids" do
+    get bids_url, headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
+    res = JSON.parse(response.body)
+    assert_equal 2, res.length
+  end
+
+  test "getting bid" do
+    get bid_url(@bid), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
+    res = JSON.parse(response.body)
+    assert_not_nil res["task_id"]
+    assert_not_nil res["user_id"]
+    assert_not_nil res["amount"]
+    assert_not_nil res["unit"]
+    assert_not_nil res["deleted"]
+  end
+
+  test "bidding adds to watch list" do
+    WatchedTask.delete_all
+    user = User.where(email: "gibson_nathaniel1@columbusstate.edu")[0]
+    assert_empty WatchedTask.where(user_id: user.id)
+    post bids_url, headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { bid: { "task_id" => Task.first.id, "amount" => "100", "unit" => "USD" } }, as: :json
+    watched_tasks = WatchedTask.where(user_id: user.id)
+    assert_not_empty watched_tasks
+    watched_task = watched_tasks[0]
+    assert_equal Task.first.id, watched_task.task_id
+    assert_equal user.id, watched_task.user_id
+  end
+
   private
 
   def bid_url(bid)

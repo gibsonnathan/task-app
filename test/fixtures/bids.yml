@@ -3,7 +3,13 @@
 bid_one:
   task: task_one
   user: user_one
+  amount: 1
+  unit: "USD"
+  deleted: false
 
 bid_two:
   task: task_two
   user: user_one
+  amount: 2
+  unit: "USD"
+  deleted: false
