@@ -5,7 +5,7 @@ class WatchedTasksControllerTest < ActionDispatch::IntegrationTest
     @watched_task = watched_tasks(:watched_task_one)
   end
 
-  test "should create watched task" do
+  test "should response with created" do
     post watched_tasks_url, headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { watched_task: { "task_id" => Task.first.id, "user_id" => User.second.id } }, as: :json
     assert_response :created
   end
@@ -17,7 +17,19 @@ class WatchedTasksControllerTest < ActionDispatch::IntegrationTest
 
   test "should delete" do
     delete watched_task_url(@watched_task), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
+    assert_nil WatchedTask.find_by_id(@watched_task.id)
     assert_response :success
+  end
+
+  test "should create watched task" do
+    WatchedTask.delete_all
+    assert_empty WatchedTask.all
+    post watched_tasks_url, headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { watched_task: { "task_id" => Task.first.id, "user_id" => User.second.id } }, as: :json
+    assert_not_empty WatchedTask.all
+    assert_equal 1, WatchedTask.count
+    watched_task = WatchedTask.first
+    assert_equal User.second.id, watched_task["user_id"]
+    assert_equal Task.first.id, watched_task["task_id"]
   end
 
   private
