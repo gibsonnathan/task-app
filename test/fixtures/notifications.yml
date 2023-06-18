@@ -5,14 +5,18 @@
 # below each fixture, per the syntax in the comments below
 #
 notification_one:
+  id: 1
   user: user_one
   task: task_one
   message: "test notification 1"
+  read: false
 
 # column: value
 #
 notification_two:
+  id: 2
   user: user_two
   task: task_two
   message: "test notification 1"
+  read: false
 # column: value

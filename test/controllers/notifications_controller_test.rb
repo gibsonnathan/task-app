@@ -16,13 +16,20 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "updating a user's notifications should return success" do
-    put notification_url(@notification), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { watched_task: { "read" => true } }, as: :json
+    put notification_url(@notification), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { notification: { "read" => true } }, as: :json
     assert_response :success
   end
 
   test "user two should not be able to update user one's notifications" do
-    put notification_url(@notification), headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { watched_task: { "read" => true } }, as: :json
+    put notification_url(@notification), headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { notification: { "read" => true } }, as: :json
     assert_response :unauthorized
+  end
+
+  test "update notification to read" do
+    assert_equal false, @notification.read
+    put notification_url(@notification), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { notification: { "read" => true } }, as: :json
+    notification = Notification.find(@notification.id)
+    assert_equal true, notification.read
   end
 
   private
