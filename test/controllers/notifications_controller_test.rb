@@ -32,6 +32,13 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal true, notification.read
   end
 
+  test "getting notifications" do
+    get "#{notifications_url}?user_id=#{users(:user_one).id}", headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
+    res = JSON.parse(response.body)[0]
+    assert_equal "test notification 1", res["message"]
+    assert_equal false, res["read"]
+  end
+
   private
 
   def notifications_url
