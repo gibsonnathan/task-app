@@ -2,8 +2,8 @@ module Api
   module V1
     class BidsController < ApplicationController
       before_action :authenticate
-      before_action :set_bid, only: %i[ show update destroy ]
-      before_action only: %i[update destroy] do
+      before_action :set_bid, only: %i[ show destroy ]
+      before_action only: %i[ destroy ] do
         user_id = @bid.user_id
         user = User.find(user_id)
         authorize user
@@ -11,7 +11,7 @@ module Api
 
       # GET /bids
       def index
-        @bids = User.order(:updated_at).page params[:page]
+        @bids = Bid.order(:updated_at).page params[:page]
         render json: @bids
       end
 
@@ -24,10 +24,12 @@ module Api
       def create
         # create record of user at bid creation time
         user = get_user!
-        @bid = Bid.new(bid_params.merge({ :user_id => user.id }))
 
-        if @bid.save
-          render json: @bid, status: :created, location: url_for([:api, :v1, @bid])
+        task = Task.find(bid_params[:task_id])
+        bid_placed = task.bid!(user, bid_params)
+
+        if bid_placed
+          render json: @bid, status: :created, location: api_v1_bid_url(@bid)
         else
           render json: @bid.errors, status: :unprocessable_entity
         end
