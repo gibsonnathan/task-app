@@ -17,13 +17,13 @@ module Api
         watched_task = WatchedTask.where(task_id: watched_task_params[:task_id]).where(user_id: watched_task_params[:user_id])
 
         if watched_task.any?
-          render json: watched_task, status: :conflict, location: ""
+          render json: watched_task, status: :conflict
           return
         end
 
         watched_task = WatchedTask.new(watched_task_params.merge({ :user_id => user.id }))
         if watched_task.save
-          render json: watched_task, status: :created, location: ""
+          render json: watched_task, status: :created
         else
           render json: watched_task.errors, status: :unprocessable_entity
         end
