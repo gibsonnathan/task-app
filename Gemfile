@@ -14,6 +14,8 @@ gem "puma", "~> 5.0"
 
 gem "byebug"
 
+gem "sprockets-rails"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
@@ -45,6 +47,8 @@ gem "kaminari"
 gem "haversine"
 
 gem "simplecov", require: false, group: :test
+
+gem "slim-rails"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

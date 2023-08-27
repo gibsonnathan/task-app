@@ -1,5 +1,4 @@
 require "test_helper"
-require_relative "../../lib/auth0_client.rb"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -7,32 +6,36 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get users_url, headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
+    get users_url
     assert_response :success
   end
 
-  test "should not get index when unauthenticated" do
-    get users_url, as: :json
-    assert_response :unauthorized
+  test "should get new" do
+    get new_user_url
+    assert_response :success
+  end
+
+  test "should create user" do
+    assert_difference("User.count") do
+      post users_url, params: { user: {  } }
+    end
+
+    assert_redirected_to user_url(User.last)
   end
 
   test "should show user" do
-    get user_url(@user), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
+    get user_url(@user)
     assert_response :success
   end
 
-  test "should not show user when unauthenticated" do
-    get user_url(@user), as: :json
-    assert_response :unauthorized
+  test "should get edit" do
+    get edit_user_url(@user)
+    assert_response :success
   end
 
-  private
-
-  def user_url(user)
-    "/api/v1/users/#{user.id}"
+  test "should update user" do
+    patch user_url(@user), params: { user: {  } }
+    assert_redirected_to user_url(@user)
   end
 
-  def users_url
-    return "/api/v1/users/"
-  end
 end

@@ -1,0 +1,10 @@
+p style="color: green" = notice
+
+== render @watched_task
+
+div
+  => link_to "Edit this watched task", edit_watched_task_path(@watched_task)
+  '|
+  =< link_to "Back to watched tasks", watched_tasks_path
+
+  = button_to "Destroy this watched task", @watched_task, method: :delete

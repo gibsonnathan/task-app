@@ -1,0 +1,10 @@
+= form_with(model: @bid) do |form|
+  - if @bid.errors.any?
+    div style="color: red"
+      h2 = "#{pluralize(@bid.errors.count, "error")} prohibited this bid from being saved:"
+      ul
+        - @bid.errors.each do |error|
+          li = error.full_message
+
+  div
+    = form.submit

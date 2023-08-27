@@ -5,47 +5,44 @@ class NotificationsControllerTest < ActionDispatch::IntegrationTest
     @notification = notifications(:notification_one)
   end
 
-  test "getting a user's notifications should return success" do
-    get "#{notifications_url}?user_id=#{users(:user_one).id}", headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
+  test "should get index" do
+    get notifications_url
     assert_response :success
   end
 
-  test "user two should not be able to get user one's notifications" do
-    get "#{notifications_url}?user_id=#{users(:user_one).id}", headers: { "Authorization" => USER_TWO_AUTH_HEADER }, as: :json
-    assert_response :unauthorized
-  end
-
-  test "updating a user's notifications should return success" do
-    put notification_url(@notification), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { notification: { "read" => true } }, as: :json
+  test "should get new" do
+    get new_notification_url
     assert_response :success
   end
 
-  test "user two should not be able to update user one's notifications" do
-    put notification_url(@notification), headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { notification: { "read" => true } }, as: :json
-    assert_response :unauthorized
+  test "should create notification" do
+    assert_difference("Notification.count") do
+      post notifications_url, params: { notification: {  } }
+    end
+
+    assert_redirected_to notification_url(Notification.last)
   end
 
-  test "update notification to read" do
-    assert_equal false, @notification.read
-    put notification_url(@notification), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { notification: { "read" => true } }, as: :json
-    notification = Notification.find(@notification.id)
-    assert_equal true, notification.read
+  test "should show notification" do
+    get notification_url(@notification)
+    assert_response :success
   end
 
-  test "getting notifications" do
-    get "#{notifications_url}?user_id=#{users(:user_one).id}", headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
-    res = JSON.parse(response.body)[0]
-    assert_equal "test notification 1", res["message"]
-    assert_equal false, res["read"]
+  test "should get edit" do
+    get edit_notification_url(@notification)
+    assert_response :success
   end
 
-  private
-
-  def notifications_url
-    "/api/v1/notifications"
+  test "should update notification" do
+    patch notification_url(@notification), params: { notification: {  } }
+    assert_redirected_to notification_url(@notification)
   end
 
-  def notification_url(notification)
-    "/api/v1/notifications/#{notification.id}"
+  test "should destroy notification" do
+    assert_difference("Notification.count", -1) do
+      delete notification_url(@notification)
+    end
+
+    assert_redirected_to notifications_url
   end
 end

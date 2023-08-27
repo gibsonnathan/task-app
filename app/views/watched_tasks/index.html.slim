@@ -1,0 +1,11 @@
+p style="color: green" = notice
+
+h1 Watched tasks
+
+#watched_tasks
+  - @watched_tasks.each do |watched_task|
+    == render watched_task
+    p
+      = link_to "Show this watched task", watched_task
+
+= link_to "New watched task", new_watched_task_path

@@ -1,0 +1,11 @@
+p style="color: green" = notice
+
+h1 Notifications
+
+#notifications
+  - @notifications.each do |notification|
+    == render notification
+    p
+      = link_to "Show this notification", notification
+
+= link_to "New notification", new_notification_path

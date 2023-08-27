@@ -1,0 +1,17 @@
+= render partial: 'layouts/all', formats: :html
+
+p style="color: green" = notice
+
+== render @task
+
+div class="task"
+  div class="title"
+    =@task.title
+  div class="description"
+    =@task.description
+
+=> link_to "Edit this task", edit_task_path(@task)
+'|
+=< link_to "Back to tasks", tasks_path
+
+= button_to "Destroy this task", @task, method: :delete

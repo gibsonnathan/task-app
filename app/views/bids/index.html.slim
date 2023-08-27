@@ -1,0 +1,11 @@
+p style="color: green" = notice
+
+h1 Bids
+
+#bids
+  - @bids.each do |bid|
+    == render bid
+    p
+      = link_to "Show this bid", bid
+
+= link_to "New bid", new_bid_path

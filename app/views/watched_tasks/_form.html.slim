@@ -1,0 +1,10 @@
+= form_with(model: @watched_task) do |form|
+  - if @watched_task.errors.any?
+    div style="color: red"
+      h2 = "#{pluralize(@watched_task.errors.count, "error")} prohibited this watched_task from being saved:"
+      ul
+        - @watched_task.errors.each do |error|
+          li = error.full_message
+
+  div
+    = form.submit

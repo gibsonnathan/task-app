@@ -1,0 +1,10 @@
+h1 Editing watched task
+
+== render "form", watched_task: @watched_task
+
+br
+
+div
+  => link_to "Show this watched task", @watched_task
+  '|
+  =< link_to "Back to watched tasks", watched_tasks_path

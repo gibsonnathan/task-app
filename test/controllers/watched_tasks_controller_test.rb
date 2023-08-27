@@ -5,40 +5,37 @@ class WatchedTasksControllerTest < ActionDispatch::IntegrationTest
     @watched_task = watched_tasks(:watched_task_one)
   end
 
-  test "should response with created" do
-    post watched_tasks_url, headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { watched_task: { "task_id" => Task.first.id, "user_id" => User.second.id } }, as: :json
-    assert_response :created
-  end
-
-  test "user one cannot create watched task for user two" do
-    post watched_tasks_url, headers: { "Authorization" => USER_ONE_AUTH_HEADER }, params: { watched_task: { "task_id" => Task.first.id, "user_id" => User.second.id } }, as: :json
-    assert_response :unauthorized
-  end
-
-  test "should delete" do
-    delete watched_task_url(@watched_task), headers: { "Authorization" => USER_ONE_AUTH_HEADER }, as: :json
-    assert_nil WatchedTask.find_by_id(@watched_task.id)
+  test "should get index" do
+    get watched_tasks_url
     assert_response :success
   end
 
-  test "should create watched task" do
-    WatchedTask.delete_all
-    assert_empty WatchedTask.all
-    post watched_tasks_url, headers: { "Authorization" => USER_TWO_AUTH_HEADER }, params: { watched_task: { "task_id" => Task.first.id, "user_id" => User.second.id } }, as: :json
-    assert_not_empty WatchedTask.all
-    assert_equal 1, WatchedTask.count
-    watched_task = WatchedTask.first
-    assert_equal User.second.id, watched_task["user_id"]
-    assert_equal Task.first.id, watched_task["task_id"]
+  test "should get new" do
+    get new_watched_task_url
+    assert_response :success
   end
 
-  private
+  test "should create watched_task" do
+    assert_difference("WatchedTask.count") do
+      post watched_tasks_url, params: { watched_task: {  } }
+    end
 
-  def watched_tasks_url
-    "/api/v1/watched_tasks"
+    assert_redirected_to watched_task_url(WatchedTask.last)
   end
 
-  def watched_task_url(watched_task)
-    "/api/v1/watched_tasks/#{watched_task.id}"
+  test "should show watched_task" do
+    get watched_task_url(@watched_task)
+    assert_response :success
   end
+
+  test "should get edit" do
+    get edit_watched_task_url(@watched_task)
+    assert_response :success
+  end
+
+  test "should update watched_task" do
+    patch watched_task_url(@watched_task), params: { watched_task: {  } }
+    assert_redirected_to watched_task_url(@watched_task)
+  end
+
 end

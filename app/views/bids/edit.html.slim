@@ -1,0 +1,10 @@
+h1 Editing bid
+
+== render "form", bid: @bid
+
+br
+
+div
+  => link_to "Show this bid", @bid
+  '|
+  =< link_to "Back to bids", bids_path
