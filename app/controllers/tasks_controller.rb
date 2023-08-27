@@ -9,7 +9,7 @@ class TasksController < ApplicationController
       @tasks = @tasks.select { |t| t.in_radius?(params[:lat].to_f, params[:long].to_f, params[:radius].to_f) }
     end
 
-    @tasks = Kaminari.paginate_array(@tasks).page(params[:page])
+    @tasks = Kaminari.paginate_array(@tasks).page(params[:page]).per(5)
   end
 
   # GET /tasks/1

@@ -38,4 +38,8 @@ class Task < ApplicationRecord
   def watchers
     WatchedTask.where(task_id: id).map(&:user)
   end
+
+  def bids
+    Bid.where("task_id=#{id}").filter { | bid | !bid.deleted }
+  end
 end
